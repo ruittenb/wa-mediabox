@@ -105,16 +105,33 @@
 }
 
 /*
- * Title
+ * title
  */
 .wa-mediabox-title {
-	position: absolute;
+    margin-top: -24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+	background: black;
+	color: #ffffff;
+	opacity: 0.0;
+	transition: opacity 0.3s, padding 0.3s;
+	-webkit-transition: opacity 0.3s, padding 0.3s;
+}
+
+/*
+ * caption
+ */
+.wa-mediabox-caption {
+	/* position: absolute; */
 	left: 0px;
 	right: 0px;
 	bottom: 0px;
-	padding: 0px 52px 0px 14px;
-	line-height: 24px;
-	font-size: 13px;
+	padding: 2px 14px;
+	line-height: 18px;
+	font-size: 12px;
 	font-weight: 300;
 	background: #333333;
 	background: rgba(0, 0, 0, 0.8);
@@ -124,8 +141,8 @@
 	-webkit-transition: opacity 0.3s, padding 0.3s;
 }
 
-.wa-mediabox-frame.loaded.has-title .wa-mediabox-title {
-	padding: 14px 52px 14px 14px;
+.wa-mediabox-frame.loaded.has-title .wa-mediabox-title,
+.wa-mediabox-frame.loaded.has-caption .wa-mediabox-caption {
 	opacity: 1.0;
 }
 

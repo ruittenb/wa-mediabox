@@ -6,12 +6,12 @@
  * @license MIT
  */
 
-(function(){
+(function () {
 
 	/*
 	 * Preloader constructor
 	 */
-	var Preloader = function(){
+	var Preloader = function () {
 
 		this.el = document.createElement("div");
 		this.el.classList.add("wa-mediabox-preloader");
@@ -49,22 +49,22 @@
 
 	};
 
-	Preloader.prototype.show = function(){
+	Preloader.prototype.show = function () {
 
 		this.el.classList.remove("hidden");
 		this.el.style.display = '';
 
 	};
 
-	Preloader.prototype.hide = function(){
+	Preloader.prototype.hide = function () {
 
 		var self = this;
 
 		this.el.classList.add("hidden");
 
-		setTimeout(function(){
+		setTimeout(function () {
 
-			if(self.el.classList.contains("hidden"))
+			if (self.el.classList.contains("hidden"))
 				self.el.style.display = 'none';
 
 		}, 350);
@@ -74,7 +74,7 @@
 	/* 
      * Gallery constructor
      */
-	var WAMediaBox_Gallery = function(parent){
+	var WAMediaBox_Gallery = function (parent) {
 
 		this.parent = parent;
 		this.mediaList = [];
@@ -92,24 +92,26 @@
 	/*
 	 * Media adders
 	 */
-	WAMediaBox_Gallery.prototype.addImage = function(src, title){
+	WAMediaBox_Gallery.prototype.addImage = function (src, title, caption) {
 
 		this.mediaList.push({
 			type: "image",
 			src: src,
-			title: title
+			title: title,
+			caption: caption
 		});
 
 		return this.mediaList.length - 1;
 
 	};
 
-	WAMediaBox_Gallery.prototype.addIframe = function(src, title, width, height){
+	WAMediaBox_Gallery.prototype.addIframe = function (src, title, caption, width, height) {
 
 		this.mediaList.push({
 			type: "iframe",
 			src: src,
 			title: title,
+			caption: caption,
 			width: width,
 			height: height
 		});
@@ -121,9 +123,9 @@
 	/*
 	 * Open gallery
 	 */
-	WAMediaBox_Gallery.prototype.open = function(index){
+	WAMediaBox_Gallery.prototype.open = function (index) {
 
-		if(this.opened) return;
+		if (this.opened) return;
 
 		var self = this;
 
@@ -142,6 +144,9 @@
 
 		this.title = document.createElement("div");
 		this.title.classList.add("wa-mediabox-title");
+
+		this.caption = document.createElement("div");
+		this.caption.classList.add("wa-mediabox-caption");
 
 		this.loading = new Preloader();
 
@@ -167,8 +172,9 @@
 		this.openBtn.setAttribute("title", this.parent.lang.openInNew);
 
 		//Put together
-		this.frame.appendChild(this.container);
 		this.frame.appendChild(this.title);
+		this.frame.appendChild(this.container);
+		this.frame.appendChild(this.caption);
 		this.frame.appendChild(this.loading.el);
 		this.frame.appendChild(this.closeBtn);
 		this.frame.appendChild(this.prevBtn);
@@ -179,42 +185,42 @@
 		document.body.appendChild(this.overlay);
 
 		//Bind events
-		this.overlay.addEventListener("click", function(ev){
+		this.overlay.addEventListener("click", function (ev) {
 
 			ev.stopPropagation();
 			self.close();
 
 		});
 
-		this.closeBtn.addEventListener("click", function(ev){
+		this.closeBtn.addEventListener("click", function (ev) {
 
 			ev.stopPropagation();
 			self.close();
 
 		});
 
-		this.prevBtn.addEventListener("click", function(ev){
+		this.prevBtn.addEventListener("click", function (ev) {
 
 			ev.stopPropagation();
 			self.prev();
 
 		});
 
-		this.nextBtn.addEventListener("click", function(ev){
+		this.nextBtn.addEventListener("click", function (ev) {
 
 			ev.stopPropagation();
 			self.next();
 
 		});
 
-		this.container.addEventListener("click", function(ev){
+		this.container.addEventListener("click", function (ev) {
 
 			ev.stopPropagation();
 			self.next();
 
 		});
 
-		this.openBtn.addEventListener("click", function(ev){
+		this.openBtn.addEventListener("click", function (ev) {
 
 			ev.stopPropagation();
 			self.openSource();
@@ -222,23 +228,30 @@
 		});
 
 		//Resize
-		this.resizeHandler = function(){
+		this.resizeHandler = function () {
 
 			self.resizeContainer();
 
 		};
 
-		this.keyDownHandler = function(ev){
+		this.keyDownHandler = function (ev) {
 
-			ev.preventDefault();
-			ev.stopPropagation();
 
-			if(ev.keyCode === 37)
-				self.prev();
-			else if(ev.keyCode === 39)
-				self.next();
-			else if(ev.keyCode === 27)
-				self.close();
+            if (ev.keyCode === 37 ||
+                ev.keyCode === 39 ||
+                ev.keyCode === 27)
+            {
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                if (ev.keyCode === 37) {
+                    self.prev();
+                } else if (ev.keyCode === 39) {
+                    self.next();
+                } else /* ev.keyCode === 27 */ {
+                    self.close();
+                }
+            }
 
 			return false;
 
@@ -248,7 +261,7 @@
 		document.body.addEventListener("keydown", this.keyDownHandler);
 
 		//Open
-		setTimeout(function(){
+		setTimeout(function () {
 
 			self.overlay.classList.add("opened");
 
@@ -264,9 +277,9 @@
 	/*
 	 * Close gallery
 	 */
-	WAMediaBox_Gallery.prototype.close = function(){
+	WAMediaBox_Gallery.prototype.close = function () {
 
-		if(!this.opened) return;
+		if (!this.opened) return;
 
 		var self = this;
 
@@ -275,7 +288,7 @@
 		window.removeEventListener("resize", this.resizeHandler);
 		document.body.removeEventListener("keydown", this.keyDownHandler);
 
-		setTimeout(function(){
+		setTimeout(function () {
 
 			self.overlay.parentElement.removeChild(self.overlay);
 			self.opened = false;
@@ -300,20 +313,20 @@
 	/*
 	 * Resize container
 	 */
-	WAMediaBox_Gallery.prototype.resizeContainer = function(){
+	WAMediaBox_Gallery.prototype.resizeContainer = function () {
 
-		if(!this.opened) return;
+		if (!this.opened) return;
 
 		//Defaults
-		if(!this.containerWidth)
+		if (!this.containerWidth)
 			this.containerWidth = Math.round(this.overlay.offsetWidth * 0.7);
 
-		if(!this.containerHeight)
+		if (!this.containerHeight)
 			this.containerHeight = Math.round(this.overlay.offsetWidth * 0.7);
 
 		var widthLimit = 160;
 
-		if(this.overlay.offsetWidth < 480)
+		if (this.overlay.offsetWidth < 480)
 			widthLimit = 70;
 
 		var maxWidth = Math.min(this.overlay.offsetWidth * 0.9, this.overlay.offsetWidth - widthLimit);
@@ -325,12 +338,12 @@
 		//Resize if neccesary
 		var ratio = targetWidth / targetHeight;
 
-		if(targetWidth > maxWidth){
+		if (targetWidth > maxWidth) {
 			targetWidth = Math.round(maxWidth);
 			targetHeight = targetWidth / ratio;
 		}
 
-		if(targetHeight > maxHeight){
+		if (targetHeight > maxHeight) {
 			targetHeight = Math.round(maxHeight);
 			targetWidth = targetHeight * ratio;
 		}
@@ -347,15 +360,15 @@
 	/*
 	 * Set media into container
 	 */
-	WAMediaBox_Gallery.prototype.setMedia = function(type, src, title, width, height){
+	WAMediaBox_Gallery.prototype.setMedia = function (type, src, title, caption, width, height) {
 
-		if(!this.opened) return;
+		if (!this.opened) return;
 
 		var self = this;
 		this.loaded = false;
 
 		this.frame.classList.remove("can-open-in-new");
-		self.frame.classList.remove("has-title");
+		self.frame.classList.remove("has-caption");
 
 		//Reset content
 		this.container.innerHTML = '';
@@ -363,16 +376,16 @@
 		//Create proper element
 		var mediaEl = null;
 
-		if(type == "image"){
+		if (type == "image") {
 
 			//Resize
-			if(width) this.containerWidth = width;
-			if(height) this.containerHeight = height;
+			if (width) this.containerWidth = width;
+			if (height) this.containerHeight = height;
 			this.resizeContainer();
 
 			mediaEl = document.createElement("img");
 
-			mediaEl.addEventListener("load", function(){
+			mediaEl.addEventListener("load", function () {
 
 				self.containerWidth = mediaEl.width;
 				self.containerHeight = mediaEl.height;
@@ -389,15 +402,16 @@
 
 		} else {
 
+            var extraHeight = (caption ? 52 : 0) + (title ? 24 : 0);
 			//Resize
-			if(width) this.containerWidth = width;
-			if(height) this.containerHeight = height + ( title ? 52 : 0 );
+			if (width) this.containerWidth = width;
+			if (height) this.containerHeight = height + extraHeight;
 			this.resizeContainer();
 
 			mediaEl = document.createElement("iframe");
 			mediaEl.src = src;
 			mediaEl.setAttribute("width", parseInt(this.frame.style.width));
-			mediaEl.setAttribute("height", parseInt(this.frame.style.height) - ( title ? 52 : 0 ));
+			mediaEl.setAttribute("height", parseInt(this.frame.style.height) - extraHeight);
 			mediaEl.setAttribute("frameborder", "0");
 			mediaEl.setAttribute("allowfullscreen", "allowfullscreen");
 
@@ -407,14 +421,20 @@
 		}
 
 		//Wait for load
-		mediaEl.addEventListener("load", function(){
+		mediaEl.addEventListener("load", function () {
 
-			setTimeout(function(){
+			setTimeout(function () {
 				
 				//Set title
-				if(title){
+				if (title) {
 					self.title.innerHTML = title;
 					self.frame.classList.add("has-title");
+				}
+
+				//Set caption
+				if (caption) {
+					self.caption.innerHTML = caption;
+					self.frame.classList.add("has-caption");
 				}
 
 				//Show
@@ -431,22 +451,28 @@
 	/*
 	 * Load media at index
 	 */
-	WAMediaBox_Gallery.prototype.loadMedia = function(index){
+	WAMediaBox_Gallery.prototype.loadMedia = function (index) {
 
-		if(!this.opened) return;
-		if(index == this.current) return;
+		if (!this.opened) return;
+		if (index == this.current) return;
 
 		var self = this;
 
-		if(!this.mediaList[index]) throw new Error("Undefined media");
+		if (!this.mediaList[index]) throw new Error("Undefined media");
 
-		var load = function(){
+		var load = function () {
 
-			self.setMedia( self.mediaList[index].type, self.mediaList[index].src, self.mediaList[index].title, self.mediaList[index].width, self.mediaList[index].height );
-
+			self.setMedia(
+                self.mediaList[index].type,
+                self.mediaList[index].src,
+                self.mediaList[index].title,
+                self.mediaList[index].caption,
+                self.mediaList[index].width,
+                self.mediaList[index].height
+            );
 		};
 
-		if(this.loaded){
+		if (this.loaded) {
 
 			this.frame.classList.remove("loaded");
 			this.loading.show();
@@ -458,12 +484,12 @@
 
 		}
 
-		if(index > 0)
+		if (index > 0)
 			this.frame.classList.add("has-prev");
 		else
 			this.frame.classList.remove("has-prev");
 
-		if(index < this.mediaList.length - 1)
+		if (index < this.mediaList.length - 1)
 			this.frame.classList.add("has-next");
 		else
 			this.frame.classList.remove("has-next");
@@ -475,9 +501,9 @@
 	/*
 	 * Switch to previous media
 	 */
-	WAMediaBox_Gallery.prototype.prev = function(){
+	WAMediaBox_Gallery.prototype.prev = function () {
 
-		if(!this.opened) return;
+		if (!this.opened) return;
 
 		var index = Math.max(0, this.current - 1);
 		this.loadMedia(index);
@@ -487,18 +513,18 @@
 	/*
 	 * Switch to next media
 	 */
-	WAMediaBox_Gallery.prototype.next = function(){
+	WAMediaBox_Gallery.prototype.next = function () {
 
-		if(!this.opened) return;
+		if (!this.opened) return;
 
 		var index = Math.min(this.mediaList.length - 1, this.current + 1);
 		this.loadMedia(index);
 
 	};
 
-	WAMediaBox_Gallery.prototype.openSource = function(){
+	WAMediaBox_Gallery.prototype.openSource = function () {
 
-		if(!this.opened) return;
+		if (!this.opened) return;
 
 		window.open( this.mediaList[this.current].src );
 
@@ -507,7 +533,7 @@
 	/*
 	 * ImageBox constructor
 	 */
-	var WAMediaBox = function(){
+	var WAMediaBox = function () {
 
 		this.lang = {
 			prev: "Previous",
@@ -520,95 +546,110 @@
 
 	};
 
-	WAMediaBox.prototype.openGallery = function(gallery, index){
+	WAMediaBox.prototype.openGallery = function (gallery, index) {
 
-		if(!this.galleries[gallery]) throw new Error("Gallery not found");
+		if (!this.galleries[gallery]) throw new Error("Gallery not found");
 
 		this.galleries[gallery].open(index);
 
 	};
 
 	/*
+	 * Gallery initializer
+	 */
+	WAMediaBox.prototype.initGallery = function (gallery) {
+
+        this.galleries[gallery] = new WAMediaBox_Gallery(this);
+	};
+
+	/*
 	 * Media adders
 	 */
-	WAMediaBox.prototype.addImage = function(gallery, src, title){
+	WAMediaBox.prototype.addImage = function (gallery, src, title, caption) {
 
-		if(!this.galleries[gallery])
+		if (!this.galleries[gallery])
 			this.galleries[gallery] = new WAMediaBox_Gallery(this);
 
-		return this.galleries[gallery].addImage(src, title);
+		return this.galleries[gallery].addImage(src, title, caption);
+	};
+
+	WAMediaBox.prototype.addIframe = function (gallery, src, title, caption, width, height) {
+
+		if (!this.galleries[gallery])
+			this.galleries[gallery] = new WAMediaBox_Gallery(this);
+
+		return this.galleries[gallery].addIframe(src, title, caption, width, height);
 
 	};
 
-	WAMediaBox.prototype.addIframe = function(gallery, src, title, width, height){
+    /*
+     * Click handler
+     */
+    WAMediaBox.prototype.onclick = function (ev) {
 
-		if(!this.galleries[gallery])
-			this.galleries[gallery] = new WAMediaBox_Gallery(this);
+        console.dir(ev); // TODO
 
-		return this.galleries[gallery].addIframe(src, title, width, height);
+        var clickEl = ev.target;
+        var parentEl = clickEl.parentNode;
+        if (clickEl.tagName.toUpperCase() !== 'IMG' ||
+            parentEl.tagName.toUpperCase() !== 'A'
+        ) {
+            return false;
+        }
 
-	};
+        var gallery = parentEl.getAttribute("data-mediabox");
+        if (!gallery) {
+            console.log('Warning: Skipping mediabox: No gallery name found in', parentEl);
+            return false;
+        }
+
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        this.initGallery(gallery);
+        var elements = this.rootEl.querySelectorAll("a[data-mediabox=\"" + gallery + "\"]");
+        var index;
+        var clickIndex;
+        for (var i = 0; i < elements.length; i++) {
+            var galleryEl = elements.item(i);
+            var src = String(galleryEl.getAttribute("href") || galleryEl.getAttribute("data-src"));
+            var title = galleryEl.getAttribute("data-title");
+            var caption = galleryEl.getAttribute("data-caption");
+            var isIframe = ( galleryEl.hasAttribute("data-iframe") || src.indexOf("youtube") >= 0 ? true : false );
+            var width = ( galleryEl.hasAttribute("data-width") ? Number(galleryEl.getAttribute("data-width")) : null );
+            var height = ( galleryEl.hasAttribute("data-height") ? Number(galleryEl.getAttribute("data-height")) : null );
+            // Add to gallery
+            if (isIframe) {
+                index = this.addIframe(gallery, src, title, caption, width, height);
+            } else {
+                index = this.addImage(gallery, src, title, caption);
+            }
+            if (galleryEl === parentEl) {
+                clickIndex = index;
+            }
+        }
+
+        this.openGallery(gallery, clickIndex);
+        return false;
+    }
 
 	/*
 	 * Bind single elements
 	 */
-	WAMediaBox.prototype.bind = function(el){
+	WAMediaBox.prototype.install = function (rootEl) {
 
-		if(el._waMediaBoxBound) return;
-
-		el._waMediaBoxBound = true;
-
-		var self = this;
-
-		var gallery = el.getAttribute("data-mediabox") || "_";
-		var src = String(el.getAttribute("href") || el.getAttribute("data-src"));
-		var title = el.getAttribute("data-title");
-		var isIframe = ( el.hasAttribute("data-iframe") || src.indexOf("youtube") >= 0 ? true : false );
-		var width = ( el.hasAttribute("data-width") ? parseInt(el.getAttribute("data-width")) : null );
-		var height = ( el.hasAttribute("data-height") ? parseInt(el.getAttribute("data-height")) : null );
-
-		var index = null;
-
-		//Add to gallery
-		if(isIframe)
-			index = this.addIframe(gallery, src, title, width, height);
-		else
-			index = this.addImage(gallery, src, title);
-		
 		//Bind open event
-		el.addEventListener("click", function(ev){
-
-			ev.preventDefault();
-			ev.stopPropagation();
-
-			self.openGallery(gallery, index);
-
-			return false;
-
-		});
-
-	};
-
-	/*
-	 * Bind all elements in given parent node
-	 */
-	WAMediaBox.prototype.bindAll = function(parentEl){
-
-		var elements = parentEl.querySelectorAll("a[data-mediabox]");
-
-		for(var i = 0; i < elements.length; i++)
-			this.bind(elements.item(i));
-
+        this.rootEl = rootEl;
+        rootEl.addEventListener("click", this.onclick.bind(this));
 	};
 
 	//Assign to window
 	window.WAMediaBox = new WAMediaBox();
 
 	//Bind lightbox elements
-	window.addEventListener("load", function(){
-		
-		window.WAMediaBox.bindAll(document.body);
+	window.addEventListener("load", function () {
 
+		window.WAMediaBox.install(document.body);
 	});
 
 })();
