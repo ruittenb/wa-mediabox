@@ -4,6 +4,8 @@
  * @author WA Studio <www.webarts.name>
  * @author Jiri Hybek <jiri@hybek.cz>
  * @license MIT
+ *
+ * Modifications by René Uittenbogaard
  */
 
 (function () {
@@ -71,9 +73,9 @@
 
 	};
 
-	/* 
-     * Gallery constructor
-     */
+	/*
+	 * Gallery constructor
+	 */
 	var WAMediaBox_Gallery = function (parent) {
 
 		this.parent = parent;
@@ -203,58 +205,48 @@
 
 			ev.stopPropagation();
 			self.prev();
-
 		});
 
 		this.nextBtn.addEventListener("click", function (ev) {
 
 			ev.stopPropagation();
 			self.next();
-
 		});
 
 		this.container.addEventListener("click", function (ev) {
 
 			ev.stopPropagation();
 			self.next();
-
 		});
 
 		this.openBtn.addEventListener("click", function (ev) {
 
 			ev.stopPropagation();
 			self.openSource();
-
 		});
 
 		//Resize
 		this.resizeHandler = function () {
-
 			self.resizeContainer();
-
 		};
 
 		this.keyDownHandler = function (ev) {
+			if (ev.keyCode === 37 ||
+				ev.keyCode === 39 ||
+				ev.keyCode === 27)
+			{
+				ev.preventDefault();
+				ev.stopPropagation();
 
-
-            if (ev.keyCode === 37 ||
-                ev.keyCode === 39 ||
-                ev.keyCode === 27)
-            {
-                ev.preventDefault();
-                ev.stopPropagation();
-
-                if (ev.keyCode === 37) {
-                    self.prev();
-                } else if (ev.keyCode === 39) {
-                    self.next();
-                } else /* ev.keyCode === 27 */ {
-                    self.close();
-                }
-            }
-
+				if (ev.keyCode === 37) {
+					self.prev();
+				} else if (ev.keyCode === 39) {
+					self.next();
+				} else /* ev.keyCode === 27 */ {
+					self.close();
+				}
+			}
 			return false;
-
 		};
 
 		window.addEventListener("resize", this.resizeHandler);
@@ -271,7 +263,6 @@
 
 		//Set opened
 		this.opened = true;
-
 	};
 
 	/*
@@ -352,9 +343,10 @@
 		this.frame.style.width = targetWidth + "px";
 		this.frame.style.height = targetHeight + "px";
 
-		this.frame.style.marginLeft = -Math.round(targetWidth / 2) + "px";
-		this.frame.style.marginTop = -Math.round(targetHeight / 2) + "px";
+		const asymmetryDisplacement = -30; // because title and caption are not equal height (estimation)
 
+		this.frame.style.marginLeft = -Math.round(targetWidth / 2) + "px";
+		this.frame.style.marginTop = -Math.round(targetHeight / 2 - asymmetryDisplacement) + "px";
 	};
 
 	/*
@@ -364,10 +356,12 @@
 
 		if (!this.opened) return;
 
+		var mediaMargin = 5; // pixels around image
 		var self = this;
 		this.loaded = false;
 
 		this.frame.classList.remove("can-open-in-new");
+		self.frame.classList.remove("has-title");
 		self.frame.classList.remove("has-caption");
 
 		//Reset content
@@ -386,23 +380,24 @@
 			mediaEl = document.createElement("img");
 
 			mediaEl.addEventListener("load", function () {
+				mediaEl.style.marginTop = mediaMargin + 'px';
+				mediaEl.style.marginLeft = mediaMargin + 'px';
 
-				self.containerWidth = mediaEl.width;
-				self.containerHeight = mediaEl.height;
+				self.containerWidth = mediaEl.width + 2 * mediaMargin;
+				self.containerHeight = mediaEl.height + 2 * mediaMargin;
 
 				self.resizeContainer();
 				self.frame.classList.add("can-open-in-new");
 
 				//Add to DOM
 				self.container.appendChild(mediaEl);
-
 			});
 
 			mediaEl.src = src;
 
 		} else {
 
-            var extraHeight = (caption ? 52 : 0) + (title ? 24 : 0);
+			var extraHeight = (caption ? 52 : 0) + (title ? 24 : 0);
 			//Resize
 			if (width) this.containerWidth = width;
 			if (height) this.containerHeight = height + extraHeight;
@@ -417,7 +412,6 @@
 
 			//Add to DOM
 			this.container.appendChild(mediaEl);
-
 		}
 
 		//Wait for load
@@ -443,9 +437,7 @@
 				self.loaded = true;
 
 			}, 550);
-
 		});
-
 	};
 
 	/*
@@ -463,25 +455,21 @@
 		var load = function () {
 
 			self.setMedia(
-                self.mediaList[index].type,
-                self.mediaList[index].src,
-                self.mediaList[index].title,
-                self.mediaList[index].caption,
-                self.mediaList[index].width,
-                self.mediaList[index].height
-            );
+				self.mediaList[index].type,
+				self.mediaList[index].src,
+				self.mediaList[index].title,
+				self.mediaList[index].caption,
+				self.mediaList[index].width,
+				self.mediaList[index].height
+			);
 		};
 
 		if (this.loaded) {
-
 			this.frame.classList.remove("loaded");
 			this.loading.show();
 			setTimeout(load, 350);
-
 		} else {
-
 			load();
-
 		}
 
 		if (index > 0)
@@ -495,7 +483,6 @@
 			this.frame.classList.remove("has-next");
 
 		this.current = index;
-
 	};
 
 	/*
@@ -559,7 +546,7 @@
 	 */
 	WAMediaBox.prototype.initGallery = function (gallery) {
 
-        this.galleries[gallery] = new WAMediaBox_Gallery(this);
+		this.galleries[gallery] = new WAMediaBox_Gallery(this);
 	};
 
 	/*
@@ -582,56 +569,54 @@
 
 	};
 
-    /*
-     * Click handler
-     */
-    WAMediaBox.prototype.onclick = function (ev) {
+	/*
+	 * Click handler
+	 */
+	WAMediaBox.prototype.onclick = function (ev) {
 
-        console.dir(ev); // TODO
+		var clickEl = ev.target;
+		var parentEl = clickEl.parentNode;
+		if (clickEl.tagName.toUpperCase() !== 'IMG' ||
+			parentEl.tagName.toUpperCase() !== 'A'
+		) {
+			return false;
+		}
 
-        var clickEl = ev.target;
-        var parentEl = clickEl.parentNode;
-        if (clickEl.tagName.toUpperCase() !== 'IMG' ||
-            parentEl.tagName.toUpperCase() !== 'A'
-        ) {
-            return false;
-        }
+		var gallery = parentEl.getAttribute("data-mediabox");
+		if (!gallery) {
+			console.log('Warning: Skipping mediabox: No data-mediabox attribute found in', parentEl);
+			return false;
+		}
 
-        var gallery = parentEl.getAttribute("data-mediabox");
-        if (!gallery) {
-            console.log('Warning: Skipping mediabox: No gallery name found in', parentEl);
-            return false;
-        }
+		ev.preventDefault();
+		ev.stopPropagation();
 
-        ev.preventDefault();
-        ev.stopPropagation();
+		this.initGallery(gallery);
+		var elements = this.rootEl.querySelectorAll("a[data-mediabox=\"" + gallery + "\"]");
+		var index;
+		var clickIndex;
+		for (var i = 0; i < elements.length; i++) {
+			var galleryEl = elements.item(i);
+			var src = String(galleryEl.getAttribute("href") || galleryEl.getAttribute("data-src"));
+			var title = galleryEl.getAttribute("data-title");
+			var caption = galleryEl.getAttribute("data-caption");
+			var isIframe = ( galleryEl.hasAttribute("data-iframe") || src.indexOf("youtube") >= 0 ? true : false );
+			var width = ( galleryEl.hasAttribute("data-width") ? Number(galleryEl.getAttribute("data-width")) : null );
+			var height = ( galleryEl.hasAttribute("data-height") ? Number(galleryEl.getAttribute("data-height")) : null );
+			// Add to gallery
+			if (isIframe) {
+				index = this.addIframe(gallery, src, title, caption, width, height);
+			} else {
+				index = this.addImage(gallery, src, title, caption);
+			}
+			if (galleryEl === parentEl) {
+				clickIndex = index;
+			}
+		}
 
-        this.initGallery(gallery);
-        var elements = this.rootEl.querySelectorAll("a[data-mediabox=\"" + gallery + "\"]");
-        var index;
-        var clickIndex;
-        for (var i = 0; i < elements.length; i++) {
-            var galleryEl = elements.item(i);
-            var src = String(galleryEl.getAttribute("href") || galleryEl.getAttribute("data-src"));
-            var title = galleryEl.getAttribute("data-title");
-            var caption = galleryEl.getAttribute("data-caption");
-            var isIframe = ( galleryEl.hasAttribute("data-iframe") || src.indexOf("youtube") >= 0 ? true : false );
-            var width = ( galleryEl.hasAttribute("data-width") ? Number(galleryEl.getAttribute("data-width")) : null );
-            var height = ( galleryEl.hasAttribute("data-height") ? Number(galleryEl.getAttribute("data-height")) : null );
-            // Add to gallery
-            if (isIframe) {
-                index = this.addIframe(gallery, src, title, caption, width, height);
-            } else {
-                index = this.addImage(gallery, src, title, caption);
-            }
-            if (galleryEl === parentEl) {
-                clickIndex = index;
-            }
-        }
-
-        this.openGallery(gallery, clickIndex);
-        return false;
-    }
+		this.openGallery(gallery, clickIndex);
+		return false;
+	}
 
 	/*
 	 * Bind single elements
@@ -639,8 +624,8 @@
 	WAMediaBox.prototype.install = function (rootEl) {
 
 		//Bind open event
-        this.rootEl = rootEl;
-        rootEl.addEventListener("click", this.onclick.bind(this));
+		this.rootEl = rootEl;
+		rootEl.addEventListener("click", this.onclick.bind(this));
 	};
 
 	//Assign to window
@@ -653,3 +638,5 @@
 	});
 
 })();
+
+/* vim: set ts=4 sw=4 noet: */
