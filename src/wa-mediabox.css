@@ -10,160 +10,187 @@
  * Containers
  */
 .wa-mediabox-overlay {
-	margin: 0;
-	padding: 0;
-	position: fixed;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	background: #333333;
-	background: rgba(20, 20, 20, 0.95);
-	z-index: 1000;
-	opacity: 0.0;
-	transition: opacity 0.4s;
-	-webkit-transition: opacity 0.4s;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #333333;
+    background: rgba(20, 20, 20, 0.95);
+    z-index: 1000;
+    opacity: 0.0;
+    transition: opacity 0.4s;
+    -webkit-transition: opacity 0.4s;
 }
 
 .wa-mediabox-overlay.opened {
-	opacity: 1.0;
+    opacity: 1.0;
 }
 
 .wa-mediabox-frame {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	width: 0;
-	height: 0;
-	margin-left: 0;
-	margin-top: 0;
-	background: #ffffff;
-	box-shadow: 0px 3px 14px rgba(0, 0, 0, 0.5);
-	transition: width 0.5s, height 0.5s, margin 0.5s;
-	-webkit-transition: width 0.5s, height 0.5s, margin 0.5s;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0;
+    height: 0;
+    margin-left: 0;
+    margin-top: 0;
+    background: #ffffff;
+    box-shadow: 0px 3px 14px rgba(0, 0, 0, 0.5);
+    /*
+    transition: width 0.5s, height 0.5s, margin 0.5s;
+    -webkit-transition: width 0.5s, height 0.5s, margin 0.5s;
+    */
 }
 
 .wa-mediabox-container {
-	position: relative;
-	width: 100%;
-	height: 100%;
-	opacity: 0.0;
-	z-index: 0;
-	cursor: pointer;
-	overflow: hidden;
-	transition: opacity 0.3s;
-	-webkit-transition: opacity 0.3s;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    opacity: 0.0;
+    z-index: 0;
+    cursor: pointer;
+    overflow: hidden;
+    transition: opacity 0.3s;
+    -webkit-transition: opacity 0.3s;
 }
 
 .wa-mediabox-frame.loaded .wa-mediabox-container {
-	opacity: 1.0;
+    opacity: 1.0;
 }
 
 .wa-mediabox-container img {
-	max-width: 100%;
-	cursor: pointer;
+    max-width: 100%;
+    cursor: pointer;
 }
 
 /*
  * Close button
  */
 .wa-mediabox-frame .wa-mediabox-close {
-	position: absolute;
-	right: -18px;
-	top: -18px;
-	width: 36px;
-	height: 36px;
-	padding: 6px;
-	background: #444444;
-	border: 0px none;
-	border-radius: 36px;
-	cursor: pointer;
-	box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
-	transition: background 0.2s, box-shadow 0.2s;
-	-webkit-transition: background 0.2s, box-shadow 0.2s;
+    position: absolute;
+    right: -18px;
+    top: -18px;
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+    background: #444444;
+    border: 0px none;
+    border-radius: 36px;
+    cursor: pointer;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s, box-shadow 0.2s;
+    -webkit-transition: background 0.2s, box-shadow 0.2s;
 }
 
 .wa-mediabox-frame .wa-mediabox-close:focus {
-	outline: 0;
+    outline: 0;
 }
 
 .wa-mediabox-frame .wa-mediabox-close:hover {
-	background: #D32F2F;
-	box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
+    background: #D32F2F;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .wa-mediabox-frame .wa-mediabox-close svg {
-	width: 24px;
-	height: 24px;
-	fill: #aaaaaa;
-	transition: fill 0.2s;
-	-webkit-transition: fill 0.2s;
+    width: 24px;
+    height: 24px;
+    fill: #aaaaaa;
+    transition: fill 0.2s;
+    -webkit-transition: fill 0.2s;
 }
 
 .wa-mediabox-frame .wa-mediabox-close:hover svg {
-	fill: #ffffff;
+    fill: #ffffff;
 }
 
 /*
- * Title
+ * title
  */
 .wa-mediabox-title {
-	position: absolute;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	padding: 0px 52px 0px 14px;
-	line-height: 24px;
-	font-size: 13px;
-	font-weight: 300;
-	background: #333333;
-	background: rgba(0, 0, 0, 0.8);
-	color: #ffffff;
-	opacity: 0.0;
-	transition: opacity 0.3s, padding 0.3s;
-	-webkit-transition: opacity 0.3s, padding 0.3s;
+    margin-top: -24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    color: #ffffff;
+    opacity: 0.0;
+    transition: opacity 0.3s, padding 0.3s;
+    -webkit-transition: opacity 0.3s, padding 0.3s;
 }
 
-.wa-mediabox-frame.loaded.has-title .wa-mediabox-title {
-	padding: 14px 52px 14px 14px;
-	opacity: 1.0;
+/*
+ * caption
+ */
+.wa-mediabox-caption {
+    /* position: absolute; */
+    max-height: 76px;
+    overflow-y: auto;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    padding: 2px 14px;
+    line-height: 18px;
+    font-size: 12px;
+    font-weight: 300;
+    color: #ffffff;
+    opacity: 0.0;
+    transition: opacity 0.3s, padding 0.3s;
+    -webkit-transition: opacity 0.3s, padding 0.3s;
+}
+
+.wa-mediabox-caption::-webkit-scrollbar {
+    background-color: #555;
+    width: 12px;
+}
+.wa-mediabox-caption::-webkit-scrollbar-thumb {
+    background-color: #bbb;
+    border-radius: 6px;
+}
+
+.wa-mediabox-frame.loaded.has-title .wa-mediabox-title,
+.wa-mediabox-frame.loaded.has-caption .wa-mediabox-caption {
+    opacity: 1.0;
 }
 
 /*
  * Open button
  */
 .wa-mediabox-frame .wa-mediabox-open {
-	position: absolute;
-	right: 10px;
-	bottom: 10px;
-	padding: 4px;
-	display: none;
-	opacity: 0.0;
-	z-index: 20;
-	cursor: pointer;
-	background: #ffffff;
-	border: 0px none;
-	border-radius: 2px;
-	transition: opacity 0.3s;
-	-webkit-transition: opacity 0.3s;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    padding: 4px;
+    display: none;
+    opacity: 0.0;
+    z-index: 20;
+    cursor: pointer;
+    background: #ffffff;
+    border: 0px none;
+    border-radius: 2px;
+    transition: opacity 0.3s;
+    -webkit-transition: opacity 0.3s;
 }
 
 .wa-mediabox-frame .wa-mediabox-open svg {
-	width: 24px;
-	height: 24px;
-	fill: #333333;
+    width: 24px;
+    height: 24px;
+    fill: #333333;
 }
 
 .wa-mediabox-frame.can-open-in-new .wa-mediabox-open {
-	display: block;
+    display: block;
 }
 
 .wa-mediabox-frame.can-open-in-new:hover .wa-mediabox-open {
-	opacity: 0.4;
+    opacity: 0.4;
 }
 
 .wa-mediabox-frame.can-open-in-new:hover .wa-mediabox-open:hover {
-	opacity: 1.0;
+    opacity: 1.0;
 }
 
 /*
@@ -172,67 +199,67 @@
 
 .wa-mediabox-prev,
 .wa-mediabox-next {
-	position: absolute;
-	top: 50%;
-	width: 74px;
-	height: 74px;
-	padding: 5px;
-	margin-top: -32px;
-	border: 0px none;
-	background: transparent;
-	cursor: pointer;
-	opacity: 0.0;
-	transition: opacity 0.3s;
-	-webkit-transition: opacity 0.3s;
+    position: absolute;
+    top: 50%;
+    width: 74px;
+    height: 74px;
+    padding: 5px;
+    margin-top: -32px;
+    border: 0px none;
+    background: transparent;
+    cursor: pointer;
+    opacity: 0.0;
+    transition: opacity 0.3s;
+    -webkit-transition: opacity 0.3s;
 }
 
 .wa-mediabox-prev { left: -80px; }
 .wa-mediabox-next { right: -80px; }
 
 .wa-mediabox-frame.has-prev .wa-mediabox-prev {
-	opacity: 1.0;
+    opacity: 1.0;
 }
 
 .wa-mediabox-frame.has-next .wa-mediabox-next {
-	opacity: 1.0;
+    opacity: 1.0;
 }
 
 .wa-mediabox-prev:focus,
 .wa-mediabox-next:focus {
-	outline: 0;
+    outline: 0;
 }
 
 .wa-mediabox-prev svg,
 .wa-mediabox-next svg {
-	width: 64px;
-	height: 64px;
-	fill: #999999;
-	transition: fill 0.2s;
-	-webkit-transition: fill 0.2s;
+    width: 64px;
+    height: 64px;
+    fill: #999999;
+    transition: fill 0.2s;
+    -webkit-transition: fill 0.2s;
 }
 
 .wa-mediabox-prev:hover svg,
 .wa-mediabox-next:hover svg {
-	fill: #ffffff;
+    fill: #ffffff;
 }
 
 @media all and (max-width: 479px) {
 
-	.wa-mediabox-prev { left: -40px; }
-	.wa-mediabox-next { right: -40px; }
+    .wa-mediabox-prev { left: -40px; }
+    .wa-mediabox-next { right: -40px; }
 
-	.wa-mediabox-prev,
-	.wa-mediabox-next {
-		width: 42px;
-		height: 42px;
-		margin-top: -21px;
-	}
+    .wa-mediabox-prev,
+    .wa-mediabox-next {
+        width: 42px;
+        height: 42px;
+        margin-top: -21px;
+    }
 
-	.wa-mediabox-prev svg,
-	.wa-mediabox-next svg {
-		width: 32px;
-		height: 32px;
-	}
+    .wa-mediabox-prev svg,
+    .wa-mediabox-next svg {
+        width: 32px;
+        height: 32px;
+    }
 
 }
 
@@ -240,36 +267,38 @@
  * PRELOADER
  */
 .wa-mediabox-preloader {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	width: 64px;
-	height: 64px;
-	margin-left: -32px;
-	margin-top: -32px;
-	opacity: 1.0;
-	transition: opacity 0.5s;
-	-webkit-transition: opacity 0.5s;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 64px;
+    height: 64px;
+    margin-left: -32px;
+    margin-top: -32px;
+    opacity: 1.0;
+    /*
+    transition: opacity 0.5s;
+    -webkit-transition: opacity 0.5s;
+    */
 }
 
 .wa-mediabox-preloader.hidden {
-	opacity: 0.0;
+    opacity: 0.0;
 }
 
 .wa-mediabox-preloader .wa-mediabox-preloader-wrap {
-	box-sizing: border-box;
-	position: relative;
-	display: inline-block;
-	width: 64px;
-	height: 64px;
+    box-sizing: border-box;
+    position: relative;
+    display: inline-block;
+    width: 64px;
+    height: 64px;
     -webkit-animation: wa-mediabox-preloader-container-rotate 1568ms linear infinite;
     animation: wa-mediabox-preloader-container-rotate 1568ms linear infinite;
 }
 
 .wa-mediabox-preloader .wa-mediabox-preloader-spinner {
-	position: absolute;
-	width: 100%;
-	height: 100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
     opacity: 1;
     border-color: #2196F3;
     -webkit-animation: wa-mediabox-preloader-fill-unfill-rotate 5332ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
@@ -288,15 +317,15 @@
 }
 
 .wa-mediabox-preloader .wa-mediabox-preloader-clipper.left {
-	float: left;
+    float: left;
 }
 
 .wa-mediabox-preloader .wa-mediabox-preloader-clipper.right {
-	float: right;
+    float: right;
 }
 
 .wa-mediabox-preloader .wa-mediabox-preloader-clipper .wa-mediabox-preloader-circle {
-	width: 200%;
+    width: 200%;
     height: 100%;
     border-width: 5px;
     border-style: solid;
@@ -320,10 +349,10 @@
 }
 
 .wa-mediabox-preloader .wa-mediabox-preloader-clipper.right .wa-mediabox-preloader-circle {
-	left: -100%;
+    left: -100%;
     border-left-color: transparent !important;
     -webkit-transform: rotate(-129deg);
-    transform: rotate(-129deg);	
+    transform: rotate(-129deg);
     -webkit-animation: wa-mediabox-preloader-right-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
     animation: wa-mediabox-preloader-right-spin 1333ms cubic-bezier(0.4, 0, 0.2, 1) infinite both;
 }
