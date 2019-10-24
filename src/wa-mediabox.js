@@ -88,7 +88,6 @@
 
 		this.containerWidth = null;
 		this.containerHeight = null;
-
 	};
 
 	/*
@@ -104,7 +103,6 @@
 		});
 
 		return this.mediaList.length - 1;
-
 	};
 
 	WAMediaBox_Gallery.prototype.addIframe = function (src, title, caption, width, height) {
@@ -119,7 +117,6 @@
 		});
 
 		return this.mediaList.length - 1;
-
 	};
 
 	/*
@@ -191,14 +188,12 @@
 
 			ev.stopPropagation();
 			self.close();
-
 		});
 
 		this.closeBtn.addEventListener("click", function (ev) {
 
 			ev.stopPropagation();
 			self.close();
-
 		});
 
 		this.prevBtn.addEventListener("click", function (ev) {
@@ -231,9 +226,9 @@
 		};
 
 		this.keyDownHandler = function (ev) {
-			if (ev.keyCode === 37 ||
-				ev.keyCode === 39 ||
-				ev.keyCode === 27)
+			if (ev.keyCode === 37 /* left  */ ||
+				ev.keyCode === 39 /* right */ ||
+				ev.keyCode === 27 /* esc   */)
 			{
 				ev.preventDefault();
 				ev.stopPropagation();
@@ -380,6 +375,7 @@
 			mediaEl = document.createElement("img");
 
 			mediaEl.addEventListener("load", function () {
+
 				mediaEl.style.marginTop = mediaMargin + 'px';
 				mediaEl.style.marginLeft = mediaMargin + 'px';
 
@@ -530,7 +526,6 @@
 		};
 
 		this.galleries = {};
-
 	};
 
 	WAMediaBox.prototype.openGallery = function (gallery, index) {
@@ -538,7 +533,6 @@
 		if (!this.galleries[gallery]) throw new Error("Gallery not found");
 
 		this.galleries[gallery].open(index);
-
 	};
 
 	/*
@@ -566,7 +560,6 @@
 			this.galleries[gallery] = new WAMediaBox_Gallery(this);
 
 		return this.galleries[gallery].addIframe(src, title, caption, width, height);
-
 	};
 
 	/*
